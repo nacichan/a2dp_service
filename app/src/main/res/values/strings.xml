@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">AudioDemo</string>
+    <string name="a2dp_service_stop">A2DP服务启动</string>
+    <string name="a2dp_service_start">A2DP服务停止</string>
+</resources>
