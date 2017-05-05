@@ -7,10 +7,12 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -29,6 +31,12 @@ public class MainActivity extends AppCompatActivity {
 
         mTextViewStatus = (TextView) findViewById(R.id.textView_status);
         mTextViewStatus.setText("按键点击状态");
+
+
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        String str = telephonyManager.getDeviceId();
+        //String str = Integer.toString(Build.VERSION.SDK_INT);
+        mTextViewStatus.setText(str);
     }
 
     public void onClick(View view) {

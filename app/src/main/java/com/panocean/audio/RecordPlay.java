@@ -1,5 +1,6 @@
 package com.panocean.audio;
 
+import android.content.Context;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioRecord;
@@ -20,6 +21,7 @@ import java.io.IOException;
 public class RecordPlay {
 
     private final static String TAG = "A2DPService";
+    private Context mContext;
     private int recBufSize = 0;
     private int playBufSize = 0;
     private int sampleRateInHz = 44100;
@@ -30,7 +32,9 @@ public class RecordPlay {
 
     private boolean blnInstantPlay = false;
 
-
+    public RecordPlay(Context ct){
+        mContext = ct;
+    }
 
     public void instantplay(){
 
@@ -45,6 +49,8 @@ public class RecordPlay {
                     channelConfig, encodingBitrate, playBufSize, AudioTrack.MODE_STREAM);
             blnInstantPlay = true;
             new ThreadInstantPlay().start();
+
+
     }
     public void stopInstantplay(){
 
@@ -53,6 +59,11 @@ public class RecordPlay {
 
     public boolean getWorkingState(){
         return blnInstantPlay;
+    }
+
+    private void setMuteEnabled(boolean enabled){
+        AudioManager mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+        mAudioManager.setStreamMute(AudioManager.STREAM_MUSIC, enabled);
     }
 
     class ThreadInstantPlay extends Thread
@@ -76,29 +87,28 @@ public class RecordPlay {
                 int line = audioRecord.read(bsBuffer, 0, recBufSize);
                 byte[] tmpBuf = new byte[line];
                 System.arraycopy(bsBuffer, 0, tmpBuf, 0, line);
-                audioTrack.write(tmpBuf, 0, tmpBuf.length);
+                if (blnInstantPlay) audioTrack.write(tmpBuf, 0, tmpBuf.length);
             }
+
+
+            // mute
+            //setMuteEnabled(true);
+            AudioManager mAudioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+            //int vol_bak = mAudioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+            //mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 1, AudioManager.ADJUST_MUTE);
+            //try {Thread.sleep(1000);}catch (InterruptedException e) {}
+            mAudioManager.setStreamMute(AudioManager.STREAM_MUSIC, true);
+            //try {Thread.sleep(1000);}catch (InterruptedException e) {}
+
 
 
             //audioTrack.stop();
             audioTrack.pause();
             Log.d(TAG, "audioTrack pause");
-            /*try {
-                Thread.sleep(100);
-            }catch (InterruptedException e) {
-            }*/
             audioTrack.flush();
             Log.d(TAG, "audioTrack flush");
-            /*try {
-                Thread.sleep(100);
-            }catch (InterruptedException e) {
-            }*/
             audioTrack.release();
             Log.d(TAG, "audioTrack release");
-            /*try {
-                Thread.sleep(100);
-            }catch (InterruptedException e) {
-            }*/
             blnInstantPlay = false;
             //Log.d(TAG, "audioTrack.getPlayState() = " + audioTrack.getPlayState());
             audioTrack = null;
@@ -108,6 +118,12 @@ public class RecordPlay {
             audioRecord.release();
             //Log.d(TAG, "audioRecord.getRecordingState() = " + audioRecord.getRecordingState());
             audioRecord = null;
+
+            //try {Thread.sleep(1000);}catch (InterruptedException e) {}
+
+            //mAudioManager.setStreamVolume(AudioManager.STREAM_MUSIC, vol_bak, AudioManager.ADJUST_MUTE);
+            mAudioManager.setStreamMute(AudioManager.STREAM_MUSIC, false);
+            //setMuteEnabled(false);
 
 
             Log.d(TAG, "audioRecord release");

@@ -85,10 +85,19 @@ public class Audio {
             playBufSize = AudioTrack.getMinBufferSize(sampleRateInHz,
                     channelConfig, encodingBitrate);
 
-            audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC,
-                    sampleRateInHz, channelConfig, encodingBitrate, recBufSize);
-            audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRateInHz,
-                    channelConfig, encodingBitrate, playBufSize, AudioTrack.MODE_STREAM);
+            try {
+                audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC,
+                        sampleRateInHz, channelConfig, encodingBitrate, recBufSize);
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, sampleRateInHz,
+                        channelConfig, encodingBitrate, playBufSize, AudioTrack.MODE_STREAM);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
             blnInstantPlay = true;
             new ThreadInstantPlay().start();
         }

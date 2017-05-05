@@ -50,7 +50,7 @@ public class A2DPService extends Service {
 
         public String getVersion() throws RemoteException {
             //Log.v(TAG, "getVersion()");
-            return "V1.00";
+            return "V1.23";
         }
 
     }
