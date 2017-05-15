@@ -49,11 +49,7 @@ public class ThreadRunnable implements Runnable {
         int bluetoothAdapterState;
         while(stop) {
             // TODO
-            /*try {
-                Thread.sleep(1000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }*/
+            try { Thread.sleep(1000); } catch (InterruptedException e) { e.printStackTrace(); }
 
             // heartbeat
             //Log.d(TAG, "线程 " + id + " : 计数 " + count);
@@ -65,7 +61,7 @@ public class ThreadRunnable implements Runnable {
                 if (mRecordPlay.getWorkingState()==true) {
                     mRecordPlay.stopInstantplay();
                 }
-                try {Thread.sleep(2000);} catch (InterruptedException e) {}
+                try {Thread.sleep(3000);} catch (InterruptedException e) {}
                 continue;
             }
 
@@ -81,6 +77,7 @@ public class ThreadRunnable implements Runnable {
                     mRecordPlay.stopInstantplay();
                 }
             }
+
         }
 
         if (mRecordPlay.getWorkingState()==true) {
