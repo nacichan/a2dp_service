@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothManager;
 import android.bluetooth.BluetoothProfile;
 import android.content.Context;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.util.Log;
 
@@ -47,6 +48,7 @@ public class ThreadRunnable implements Runnable {
     @Override
     public void run() {
         int bluetoothAdapterState;
+        MediaPlayer mPlayer = MediaPlayer.create(mContext, R.raw.altair);
         while(stop) {
             // TODO
             try { Thread.sleep(1000); } catch (InterruptedException e) { e.printStackTrace(); }
@@ -71,6 +73,8 @@ public class ThreadRunnable implements Runnable {
             if (a2dp_state==2) {
                 if (mRecordPlay.getWorkingState()==false) {
                     mRecordPlay.instantplay();
+
+                    mPlayer.start();
                 }
             }else{
                 if (mRecordPlay.getWorkingState()==true) {

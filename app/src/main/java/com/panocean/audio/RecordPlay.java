@@ -246,7 +246,7 @@ public class RecordPlay {
                 }
 
                 public void run() {
-                    try { Thread.sleep(200); } catch (InterruptedException e) { }
+                    try { Thread.sleep(200); } catch (InterruptedException e) { e.printStackTrace();}
                     while (!stop_pc) {
                         if ((producer_overflow) || (consumer_index < producer_index)) {
                             System.arraycopy(buffer, consumer_index * UNIT, cBuf, 0, UNIT);
